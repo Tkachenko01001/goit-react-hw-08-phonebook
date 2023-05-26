@@ -1,21 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
 import { filterContacts } from "Redux/Slices/Slices";
-import { Label, Input } from "../../styled/style.styled";
+import TextField from '@mui/material/TextField';
 
 const ContactFilter = () => {
 
     const filter = useSelector((state) => state.filter);
     const dispatch = useDispatch();
 
-    return (
-        <Label>
-        find contacts by name
-        <Input
-          type="text"
-          name="filter"
-          value={filter}
-          onChange={(e) => dispatch(filterContacts(e.target.value))}/>
-      </Label>
+    return ( 
+      <TextField 
+      id="outlined-basic" 
+      label="find contacts by name" 
+      variant="outlined" 
+      type="text"
+      name="filter"
+      value={filter}
+      onChange={(e) => dispatch(filterContacts(e.target.value))}
+      size="small" />
     )
 }
 

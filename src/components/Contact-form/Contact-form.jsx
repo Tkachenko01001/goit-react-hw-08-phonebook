@@ -1,58 +1,93 @@
+import * as React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { addContact } from "Redux/operations/operations";
-import { Form, Button, Label, Input } from "../../styled/style.styled";
+import  StyledForm  from "../../styled/Contact-form.styled";
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
+import { getTasks } from "Redux/selectors/getTasks";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { useState, forwardRef } from 'react';
 
 const ContactForm = () => {
+  const [open, setOpen] = useState(false);
 
-    const contacts = useSelector((state) => state.contacts.items);
-    const dispatch = useDispatch()
+  const contacts = useSelector((state) => state.contacts.items);
+  const userData = useSelector(getTasks);
+  const dispatch = useDispatch();
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      const { name, number } = e.target.elements;
-      const newContact = { name: name.value, number: number.value };
+  const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
-      if (checkDuplicateContact(newContact)) {
-        alert(`${newContact.name} is already in contacts`);
-        return;
-      }
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-      dispatch(addContact(newContact));
-      e.target.reset();
-    };
+    setOpen(false);
+  };
 
-    const checkDuplicateContact = (newContact) => {
-      return contacts.some(contact => contact.name.toLowerCase() === newContact.name.toLowerCase());
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { name, number } = e.target.elements;
+    const newContact = { name: name.value, number: number.value };
 
+    if (checkDuplicateContact(newContact)) {
+      alert(`${newContact.name} is already in contacts`);
+      return;
+    }
 
-    return (
-        <Form onSubmit={handleSubmit}>
-        <h2>Contacts</h2>
-        <Label>
-          Name
-          <Input
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-        </Label>
+    dispatch(addContact(newContact));
+    setOpen(true);
+    e.target.reset();
+  };
 
-        <Label>
-          Number
-          <Input
-            type="tel"
-            name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          />
-        </Label>
-        <Button>Add contact</Button>
-      </Form>
-    )
-}
+  const checkDuplicateContact = (newContact) => {
+    return contacts.some(
+      (contact) =>
+        contact.name.toLowerCase() === newContact.name.toLowerCase()
+    );
+  };
+
+  return (
+    <StyledForm onSubmit={handleSubmit}>
+      <h2>Contacts</h2>
+      <TextField
+        id="outlined-basic"
+        label="Name"
+        variant="outlined"
+        type="text"
+        name="name"
+        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        required
+      />
+      <TextField
+        id="outlined-basic"
+        label="number"
+        variant="outlined"
+        type="tel"
+        name="number"
+        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+        required
+      />
+      <Button type="submit" variant="contained">
+        {userData.isLoading ? (
+          <CircularProgress size={25} color="inherit" />
+        ) : (
+          "Add contact"
+        )}
+      </Button>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+           Contact added successfully!
+        </Alert>
+      </Snackbar>
+    </StyledForm>
+  );
+};
 
 export default ContactForm;
