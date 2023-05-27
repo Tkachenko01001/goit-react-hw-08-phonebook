@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteContact } from "../../Redux/operations/operations";
 import ContactsListElement from "../Contact-list-element/Contacts-list-element";
@@ -5,7 +6,6 @@ import { getTasks } from "Redux/selectors/getTasks";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 

@@ -1,14 +1,13 @@
-import * as React from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { addContact } from "Redux/operations/operations";
-import  StyledForm  from "../../styled/Contact-form.styled";
+import React, { useState, forwardRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact } from 'Redux/operations/operations';
+import StyledForm from '../../styled/Contact-form.styled';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
-import { getTasks } from "Redux/selectors/getTasks";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { useState, forwardRef } from 'react';
+import { getTasks } from 'Redux/selectors/getTasks';
 
 const ContactForm = () => {
   const [open, setOpen] = useState(false);
@@ -55,7 +54,7 @@ const ContactForm = () => {
     <StyledForm onSubmit={handleSubmit}>
       <h2>Contacts</h2>
       <TextField
-        id="outlined-basic"
+        id="name"
         label="Name"
         variant="outlined"
         type="text"
@@ -65,8 +64,8 @@ const ContactForm = () => {
         required
       />
       <TextField
-        id="outlined-basic"
-        label="number"
+        id="number"
+        label="Number"
         variant="outlined"
         type="tel"
         name="number"
@@ -78,12 +77,12 @@ const ContactForm = () => {
         {userData.isLoading ? (
           <CircularProgress size={25} color="inherit" />
         ) : (
-          "Add contact"
+          'Add contact'
         )}
       </Button>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-           Contact added successfully!
+          Contact added successfully!
         </Alert>
       </Snackbar>
     </StyledForm>
