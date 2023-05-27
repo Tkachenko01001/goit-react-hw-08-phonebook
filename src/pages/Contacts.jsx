@@ -4,7 +4,7 @@ import { fetchContacts } from "Redux/operations/operations";
 import ContactForm from "../components/Contact-form/Contact-form";
 import ContactFilter from "../components/Contact-filter/Contact-filter";
 import ContactsList from "../components/Contact-list/Contacts-list";
-import { Box, Slide, Grid, Divider } from "@mui/material";
+import { Box, Slide, Grid } from "@mui/material";
 
 const Contacts = () => {
   const dispatch = useDispatch();
