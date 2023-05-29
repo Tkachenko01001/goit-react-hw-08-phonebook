@@ -13,7 +13,7 @@ const ContactForm = () => {
   const [open, setOpen] = useState(false);
 
   const contacts = useSelector((state) => state.contacts.items);
-  const userData = useSelector(getTasks);
+  const contactsData = useSelector(getTasks);
   const dispatch = useDispatch();
 
   const Alert = forwardRef(function Alert(props, ref) {
@@ -73,13 +73,11 @@ const ContactForm = () => {
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
       />
-      <Button type="submit" variant="contained">
-        {userData.isLoading ? (
-          <CircularProgress size={25} color="inherit" />
-        ) : (
-          'Add contact'
-        )}
-      </Button>
+
+      {contactsData.operation === 'add' ? 
+       <Button type="submit" variant="contained"><CircularProgress size={25} color="inherit"/></Button> : 
+       <Button type="submit" variant="contained">Add contact</Button> }
+    
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Contact added successfully!

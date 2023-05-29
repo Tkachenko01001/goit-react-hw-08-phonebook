@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "Redux/operations/operations";
 import { TextField, Button, Box, Slide } from "@mui/material";
+import { selectUserData } from "Redux/selectors/getTasks";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogged, setIsLogged] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const dispatch = useDispatch();
+  const userData = useSelector(selectUserData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,23 +23,20 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     dispatch(loginUser({ email, password }));
-
-    setEmail("");
-    setPassword("");
-    setIsLogged(true);
+    setSubmitted(true);
   };
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
-      <Slide direction="left" in={!isLogged} timeout={500}>
+      <Slide direction="left" in={!userData.isLoggedIn} timeout={500}>
         <form
           onSubmit={handleSubmit}
           style={{ border: "1px solid #ccc", padding: "20px" }}
         >
           <Box display="flex" flexDirection="column" gap={3}>
             <h2>Login</h2>
+            
             <TextField
               type="email"
               name="email"
@@ -46,7 +45,8 @@ const Login = () => {
               onChange={handleChange}
               required
               variant="outlined"
-            />
+              error={submitted && userData.isError}
+              helperText={submitted && userData.isError ? "Incorrect entry." : ""}/>
 
             <TextField
               type="password"
@@ -56,6 +56,8 @@ const Login = () => {
               onChange={handleChange}
               required
               variant="outlined"
+              error={submitted && userData.isError}
+              helperText={submitted && userData.isError ? "Incorrect entry." : ""}
             />
 
             <Button type="submit" variant="contained" color="primary">

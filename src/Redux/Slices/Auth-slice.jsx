@@ -6,6 +6,7 @@ const initialState = {
     token: null,
     isLoggedIn: false,
     isRefreshing: false,
+    isError: false,
 }
 
 const saveDataUser = (state, action) => {
@@ -19,7 +20,9 @@ const authSlice = createSlice({
     initialState,
     extraReducers: {
         [registerUser.fulfilled](state, action){ saveDataUser(state, action) },
+        [registerUser.rejected](state){ state.isError = true; },
         [loginUser.fulfilled](state, action){ saveDataUser(state, action) },
+        [loginUser.rejected](state){ state.isError = true; },
 
         [logoutUser.fulfilled](state, _){ 
             state.user = {name: null, email: null};

@@ -39,25 +39,25 @@ export const deleteContact = createAsyncThunk('contacts/deleteContact', async (c
     }
 })
 
-export const registerUser = createAsyncThunk('user/register', async credentials => {
+export const registerUser = createAsyncThunk('user/register', async (credentials, {rejectWithValue}) => {
     try {
         const {data} = await axios.post('users/signup', credentials);
         token.set(data.token);
 
         return data;
     } catch (error) {
-        console.log(error);
+        return rejectWithValue(error.response.data);
     }
 })
 
-export const loginUser = createAsyncThunk('user/login', async credentials => {
+export const loginUser = createAsyncThunk('user/login', async (credentials, {rejectWithValue}) => {
     try {
         const {data} = await axios.post('users/login', credentials);
         token.set(data.token);
 
         return data;
     } catch (error) {
-        console.log(error);
+        return rejectWithValue(error.response.data);
     }
 })
 

@@ -1,12 +1,17 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchContacts } from "Redux/operations/operations";
 import ContactForm from "../components/Contact-form/Contact-form";
 import ContactFilter from "../components/Contact-filter/Contact-filter";
 import ContactsList from "../components/Contact-list/Contacts-list";
 import { Box, Slide, Grid } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import { getTasks } from "Redux/selectors/getTasks";
+import { CircularStyled } from "styled/Circular-progres.styled";
 
 const Contacts = () => {
+  const contactsData = useSelector(getTasks);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,8 +54,12 @@ const Contacts = () => {
           >
             <Slide direction="down" in={true} mountOnEnter unmountOnExit>
               <div>
+              { contactsData.operation === 'fatch' ? <CircularStyled><CircularProgress size={25} color="inherit" /></CircularStyled> : 
+              <>
                 <ContactFilter />
                 <ContactsList />
+              </>
+              }
               </div>
             </Slide>
           </Box>
